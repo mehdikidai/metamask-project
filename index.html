@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test dApp</title>
+</head>
+<body>
+
+<h2>Connect Wallet</h2>
+
+<button onclick="connectWallet()">Connect MetaMask</button>
+<button onclick="sendTransaction()">Send Test ETH</button>
+<button onclick="switchNetwork()">Switch to Sepolia</button>
+
+
+<p id="account"></p>
+
+<script>
+
+let account = null;
+
+
+async function connectWallet(){
+
+ if(!window.ethereum){
+   alert("Install MetaMask");
+   return;
+ }
+
+ const accounts = await window.ethereum.request({
+   method: "eth_requestAccounts"
+ });
+
+ account = accounts[0];
+
+ document.getElementById("account").innerText =
+ "Connected: " + account;
+
+}
+
+async function switchNetwork(){
+
+ await window.ethereum.request({
+   method: "wallet_switchEthereumChain",
+   params: [{ chainId: "0xaa36a7" }]
+ });
+
+}
+
+async function sendTransaction(){
+
+ if(!account){
+   alert("Connect wallet first");
+   return;
+ }
+
+ const tx = {
+   from: account,
+   to: account,
+   value: "0x2386F26FC10000" // 0.01 ETH
+ };
+
+ try {
+
+   const txHash = await window.ethereum.request({
+     method: "eth_sendTransaction", // sepolia
+     params: [tx]
+   });
+
+   console.log("Transaction:", txHash);
+
+ } catch(error){
+
+   console.error(error);
+
+ }
+
+}
+
+</script>
+
+</body>
+</html>
