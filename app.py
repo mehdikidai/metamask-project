@@ -3,7 +3,6 @@ import time
 import os
 from dotenv import load_dotenv
 
-file_env = load_dotenv()
 
 if not load_dotenv():
     print(".env file not found")
